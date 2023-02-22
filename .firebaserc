@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "recipes-ac036": {
+      "hosting": {
+        "app": [
+          "recipes-ac036"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "recipes-ac036"
+  }
+}
