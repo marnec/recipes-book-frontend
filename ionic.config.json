@@ -1,0 +1,7 @@
+{
+  "name": "recipes-book-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
