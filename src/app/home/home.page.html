@@ -1,8 +1,14 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <div class="flex flex-row">
+      <ion-title> Blank </ion-title>
+      <ion-avatar class="p-1">
+        <img
+          alt="Silhouette of a person's head"
+          [src]="(user$ | async)?.photoURL"
+        />
+      </ion-avatar>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -15,6 +21,14 @@
 
   <div id="container">
     <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <p>
+      Start with Ionic
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://ionicframework.com/docs/components"
+        >UI Components</a
+      >
+    </p>
   </div>
 </ion-content>
