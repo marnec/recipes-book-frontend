@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 import firebase from 'firebase/compat/app';
 
 @Component({
@@ -9,11 +10,13 @@ import firebase from 'firebase/compat/app';
 })
 export class LoginPage{
 
-  constructor(public auth: AngularFireAuth) {
+  constructor(public auth: AngularFireAuth, private router: Router) {
   }
-  login() {
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  async login() {
+    await this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    await this.router.navigate(['home']);
   }
+  
   logout() {
     this.auth.signOut();
   }
