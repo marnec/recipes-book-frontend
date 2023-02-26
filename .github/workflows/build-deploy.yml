@@ -11,11 +11,6 @@ jobs:
   build_and_deploy:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@master
-      - name: Unlock secrets
-        uses: sliteteam/github-action-git-crypt-unlock@1.2.0
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
       - uses: actions/checkout@v2
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
