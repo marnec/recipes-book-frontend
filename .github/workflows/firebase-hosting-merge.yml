@@ -11,16 +11,19 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
+      - run: mkdir -p .git/git-crypt/keys/
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
       - run: git-crypt unlock .git/git-crypt/keys/default
   build:
     runs-on: self-hosted
+    needs: unlock
     container:
       image: docker/dockerfile.production
     steps:
       - run: npm ci && npm run build
   deploy:
     runs-on: self-hosted
+    needs: [unlock, build]
     steps:
       - run: docker ps
       - uses: FirebaseExtended/action-hosting-deploy@v0
