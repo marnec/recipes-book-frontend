@@ -2,19 +2,30 @@
 # https://github.com/firebase/firebase-tools
 
 name: Deploy to Firebase Hosting on merge
-'on':
+"on":
   push:
     branches:
       - main
 jobs:
-  build_and_deploy:
+  unlock:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - run: cat ${{ secrets.GIT_CRYPT_KEY }} | base64 -d > .git/git-crypt/keys/default
+      - run: git-crypt unlock .git/git-crypt/keys/default
+  build:
+    runs-on: self-hosted
+    container:
+      image: docker/dockerfile.production
+    steps:
       - run: npm ci && npm run build
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - run: docker ps
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}'
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}"
           channelId: live
           projectId: recipes-ac036
