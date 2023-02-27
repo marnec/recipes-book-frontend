@@ -11,7 +11,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - run: cat ${{ secrets.GIT_CRYPT_KEY }} | base64 -d > .git/git-crypt/keys/default
+      - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
       - run: git-crypt unlock .git/git-crypt/keys/default
   build:
     runs-on: self-hosted
