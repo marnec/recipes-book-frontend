@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: git-crypt init
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
+      - run: git stash
       - run: git-crypt unlock .git/git-crypt/keys/default
   build_deploy:
     runs-on: self-hosted
