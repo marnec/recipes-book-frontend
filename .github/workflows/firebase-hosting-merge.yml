@@ -19,17 +19,9 @@ jobs:
     needs: unlock
     container:
       image: node:16
+      volume: ./:/app/dist
     steps:
       - run: npm i -g npm@latest
+      - run: npm i -g firebase-tools
       - run: npm ci && npm run build
-  deploy:
-    runs-on: self-hosted
-    needs: [unlock, build]
-    steps:
-      - run: docker ps
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}"
-          channelId: live
-          projectId: recipes-ac036
+      - run: firebase --token ${{ secrets.FIREBASE_TOKEN }} deploy
