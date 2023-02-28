@@ -19,8 +19,8 @@ jobs:
     needs: unlock
     container:
       image: node:16
-      env: GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}
-
+      env: 
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}
     steps:
       - run: npm i -g npm@latest
       - run: npm i -g firebase-tools
