@@ -10,7 +10,7 @@ jobs:
   unlock:
     runs-on: self-hosted
     steps:
-      - run: ls -l
+      - run: rm -rf ./*
       - uses: actions/checkout@v3
       - run: git-crypt init
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
