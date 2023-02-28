@@ -19,7 +19,6 @@ jobs:
     needs: unlock
     container:
       image: node:16
-      volume: ./:/app/dist
     steps:
       - run: npm i -g npm@latest
       - run: npm i -g firebase-tools
