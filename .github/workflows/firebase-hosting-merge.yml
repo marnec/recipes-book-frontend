@@ -14,13 +14,15 @@ jobs:
       - run: mkdir -p .git/git-crypt/keys/
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
       - run: git-crypt unlock .git/git-crypt/keys/default
-  build:
+  build_deploy:
     runs-on: self-hosted
     needs: unlock
     container:
       image: node:16
+      env: GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}
+
     steps:
       - run: npm i -g npm@latest
       - run: npm i -g firebase-tools
       - run: npm ci && npm run build
-      - run: firebase --token ${{ secrets.FIREBASE_TOKEN }} deploy
+      - run: firebase deploy
