@@ -21,7 +21,7 @@ jobs:
       image: node:16
     steps:
       - run: npm i -g npm@latest
-      - run: npm install && npm run build
+      - run: npm ci && npm run build
   deploy:
     runs-on: self-hosted
     needs: [unlock, build]
