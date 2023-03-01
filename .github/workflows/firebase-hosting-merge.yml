@@ -22,9 +22,8 @@ jobs:
     container:
       image: node:16
       env: 
-        GOOGLE_APPLICATION_CREDENTIALS: $HOME/secret.key
+        GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
-      - run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_AC036 }}" > $HOME/secret.key
       - run: npm i -g npm@latest
       - run: npm i -g firebase-tools
       - run: npm ci && npm run build
