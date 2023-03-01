@@ -17,7 +17,7 @@ jobs:
       - run: apt update && apt install -y git-crypt
       - uses: actions/checkout@v3
         with: 
-          set-safe-directory: '*'
+          set-safe-directory: '/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}'
       - run: git-crypt init
         continue-on-error: true
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
