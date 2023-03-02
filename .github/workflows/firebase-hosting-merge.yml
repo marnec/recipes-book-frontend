@@ -15,7 +15,7 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
       - run: apt update && apt install -y git-crypt
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - run: git-crypt init
         continue-on-error: true
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
