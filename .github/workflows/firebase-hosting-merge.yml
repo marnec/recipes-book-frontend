@@ -32,6 +32,6 @@ jobs:
       - run: firebase deploy
   brute_clean:
     runs-on: self-hosted
-#     needs: [build_deploy]
+    needs: [build_deploy]
     steps:
-      - run: pwd
+      - run: sudo rm -rf .git
