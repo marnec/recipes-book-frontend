@@ -22,6 +22,7 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
       - run: apt update && apt install -y git-crypt
+      - run: git config --global --add safe.directory /__w/recipes-book-frontend/recipes-book-frontend
       - run: git-crypt init
         continue-on-error: true
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
