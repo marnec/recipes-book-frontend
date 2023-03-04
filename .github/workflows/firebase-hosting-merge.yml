@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          set-safe-directory: "/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}"
+          set-safe-directory: "/__w/recipes-book-frontend/recipes-book-frontend"
       - run: apt update && apt install -y git-crypt
       - run: git-crypt init
         continue-on-error: true
