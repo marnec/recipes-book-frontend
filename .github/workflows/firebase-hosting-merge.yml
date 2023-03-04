@@ -7,16 +7,20 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
+  checkout:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          set-safe-directory: "/__w/recipes-book-frontend/recipes-book-frontend"
   build_deploy:
     runs-on: self-hosted
+    needs: [checkout]
     container:
       image: node:16
       env: 
         GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
-      - uses: actions/checkout@v3
-        with:
-          set-safe-directory: "/__w/recipes-book-frontend/recipes-book-frontend"
       - run: apt update && apt install -y git-crypt
       - run: git-crypt init
         continue-on-error: true
