@@ -24,7 +24,7 @@ jobs:
       - run: git-crypt init
         continue-on-error: true
       - run: echo "${{ secrets.GIT_CRYPT_KEY }}" | base64 -d > .git/git-crypt/keys/default
-      - run: git stash
+#       - run: git stash
       - run: git-crypt unlock .git/git-crypt/keys/default
       - run: npm i -g npm@latest
       - run: npm i -g firebase-tools
