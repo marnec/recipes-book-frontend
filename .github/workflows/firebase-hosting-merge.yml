@@ -15,6 +15,8 @@ jobs:
         GOOGLE_APPLICATION_CREDENTIALS: ./recipes-ac036-firebase-adminsdk-1mje6-a903c2c3df.json
     steps:
       - uses: actions/checkout@v3
+        with:
+          set-safe-directory: "/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}"
       - run: apt update && apt install -y git-crypt
       - run: git-crypt init
         continue-on-error: true
