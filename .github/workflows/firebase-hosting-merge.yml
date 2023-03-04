@@ -11,8 +11,6 @@ jobs:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-        with:
-          set-safe-directory: "/__w/recipes-book-frontend/recipes-book-frontend"
   build_deploy:
     runs-on: self-hosted
     needs: [checkout]
