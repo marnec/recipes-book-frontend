@@ -1,0 +1,19 @@
+{
+  "home": {
+    "toolbar": {
+      "title": "Home"
+    },
+    "cards": {
+      "recipes": {
+        "title": "Recipes",
+        "subtitle": "Go to recipes list",
+        "description": "A list of personal recipes"
+      }
+    }
+  },
+  "recipes": {
+    "toolbar": {
+        "title": "Recipes"
+    }
+  }
+}

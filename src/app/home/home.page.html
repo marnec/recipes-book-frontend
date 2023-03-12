@@ -1,34 +1,44 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <div class="flex flex-row">
-      <ion-title> Blank </ion-title>
-      <ion-avatar class="p-1">
-        <img
-          alt="Silhouette of a person's head"
-          [src]="(user$ | async)?.photoURL"
-        />
-      </ion-avatar>
-    </div>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu contentId="main-content">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title>Menu Content</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">This is the menu content.</ion-content>
+</ion-menu>
+
+<div id="main-content">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <div class="flex flex-row">
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title> {{ 'home.toolbar.title' | translate }} </ion-title>
+        <ion-avatar class="p-1">
+          <img
+            alt="Silhouette of a person's head"
+            [src]="(user$ | async)?.photoURL"
+          />
+        </ion-avatar>
+      </div>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>
-      Start with Ionic
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://ionicframework.com/docs/components"
-        >UI Components</a
-      >
-    </p>
-  </div>
-</ion-content>
+  <ion-content [fullscreen]="true">
+    <ion-card routerLink="/recipes">
+      <ion-card-header>
+        <ion-card-title>
+          {{ 'home.cards.recipes.title' | translate }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{ 'home.cards.recipes.subtitle' | translate }}
+        </ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        {{ 'home.cards.recipes.description' | translate }}
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+</div>
