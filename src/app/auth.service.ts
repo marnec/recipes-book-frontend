@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from './user.interface';
+import { User } from './common/interfaces/user.interface';
 import { environment } from 'src/environments/environment';
 import { firstValueFrom } from 'rxjs';
 
