@@ -3,5 +3,5 @@ import { firebase } from 'src/firebase.config';
 export const environment = {
   firebase,
   production: true,
-  api: ''
+  api: 'https://marnec.ddns.net'
 };

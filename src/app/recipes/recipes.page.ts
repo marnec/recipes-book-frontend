@@ -11,6 +11,7 @@ import { RecipesService } from './recipes.service';
 })
 export class RecipesPage extends ListComponent<Recipe> implements OnInit {
   
+  
   constructor(
     protected override entityService: RecipesService,
     protected override modal: ModalController
