@@ -44,7 +44,7 @@ export abstract class ListComponent<E extends Base, F = Partial<E>> {
     return <PaginationConfig<E>>{
       skip: 0,
       pageSize: this.pageSize,
-      sortOrder: 'asc',
+      sortOrder: 'ASC',
       sortField: 'id',
     };
   }

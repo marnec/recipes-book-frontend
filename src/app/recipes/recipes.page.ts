@@ -10,8 +10,6 @@ import { RecipesService } from './recipes.service';
   styleUrls: ['./recipes.page.scss'],
 })
 export class RecipesPage extends ListComponent<Recipe> implements OnInit {
-  
-  
   constructor(
     protected override entityService: RecipesService,
     protected override modal: ModalController

@@ -13,36 +13,42 @@ const headers = new HttpHeaders().set('accept', 'application/json');
 @Injectable({
   providedIn: 'root',
 })
-export class RecipesService implements CrudService<Recipe> {
-  constructor(private http: HttpClient) {}
+export class RecipesService
+  extends CrudService<Recipe>
+  implements CrudService<Recipe>
+{
+  constructor(private http: HttpClient) {
+    super();
+  }
 
   get(id: string): Observable<Recipe> {
     throw new Error('Method not implemented.');
   }
+
   find(
     filter: Partial<Recipe>,
     page: number,
-    pageSize: number,
+    size: number,
     sortField: keyof Recipe,
     sortOrder: SortOrder
   ): Observable<PaginatedResult<Recipe>> {
     
-    const params = new HttpParams();
-    for (const key in filter) {
-      const value = filter[key as keyof typeof filter];
-      if (value) {
-        params.set(key, value);
-      }
-    }
-    
+    const params = this.getPageableParams({
+      page,
+      size,
+      sort: { [sortField]: sortOrder },
+    }).appendAll(filter || {});
+
     return this.http.get<PaginatedResult<Recipe>>(endpoint, {
       headers,
       params,
     });
   }
+
   save(id: string | null, dto: Partial<Recipe>): Observable<Recipe> {
     throw new Error('Method not implemented.');
   }
+
   delete(id: string): Observable<void> {
     throw new Error('Method not implemented.');
   }
