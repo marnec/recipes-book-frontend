@@ -2,6 +2,11 @@ import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from './interfaces/paginates-result.interface';
 
+export type NullablePartial<T> = {
+  [P in keyof T]?: T[P] | null;
+};
+
+
 export type SortOrder = 'ASC' | 'DESC';
 
 export class SortObject {
@@ -16,7 +21,7 @@ export interface BasePaginatedFilterDto {
   sort?: SortObject;
 }
 
-export abstract class CrudService<E, F = Partial<E>> {
+export abstract class CrudService<E, F = NullablePartial<E>> {
   abstract get(id: string): Observable<E>;
 
   abstract find(
@@ -27,7 +32,7 @@ export abstract class CrudService<E, F = Partial<E>> {
     sortOrder: SortOrder | undefined
   ): Observable<PaginatedResult<E>>;
 
-  abstract save(id: string | null, dto: Partial<E>): Observable<E>;
+  abstract save(id: string | null, dto: NullablePartial<E>): Observable<E>;
 
   abstract delete(id: string): Observable<void>;
 

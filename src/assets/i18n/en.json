@@ -13,7 +13,33 @@
   },
   "recipes": {
     "toolbar": {
-        "title": "Recipes"
+      "title": "Recipes"
+    },
+    "content": {
+      "confirmDelete": "Are you sure you want to delete this recipe? This action cannot be reversed",
+      "titlePlaceholder": "New recipe"
+    }
+  },
+  "recipe": {
+    "toolbar": {
+      "titlePlaceholder": "New recipe"
+    },
+    "content": {
+      "ingredients": {
+        "title": "Ingredients"
+      },
+      "servings": "Servings",
+      "steps": {
+        "title": "Steps"
+      }
+    }
+  },
+  "ingredients": {
+    "content": {
+      "search": {
+        "placeholder": "Search ingredient...",
+        "new": "add ingredient: {{label}}"
+      }
     }
   }
 }

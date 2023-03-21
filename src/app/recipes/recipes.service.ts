@@ -2,7 +2,11 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { CrudService, SortOrder } from '../common/crud.service';
+import {
+  CrudService,
+  NullablePartial,
+  SortOrder,
+} from '../common/crud.service';
 import { PaginatedResult } from '../common/interfaces/paginates-result.interface';
 import { Recipe } from '../common/interfaces/recipe.interface';
 
@@ -22,7 +26,7 @@ export class RecipesService
   }
 
   get(id: string): Observable<Recipe> {
-    throw new Error('Method not implemented.');
+    return this.http.get<Recipe>(`${endpoint}/${id}`, { headers });
   }
 
   find(
@@ -32,7 +36,6 @@ export class RecipesService
     sortField: keyof Recipe,
     sortOrder: SortOrder
   ): Observable<PaginatedResult<Recipe>> {
-    
     const params = this.getPageableParams({
       page,
       size,
@@ -45,11 +48,14 @@ export class RecipesService
     });
   }
 
-  save(id: string | null, dto: Partial<Recipe>): Observable<Recipe> {
-    throw new Error('Method not implemented.');
+  save(id: string | null, dto: NullablePartial<Recipe>): Observable<Recipe> {
+    if (!id) {
+      return this.http.post<Recipe>(endpoint, dto);
+    }
+    return this.http.put<Recipe>(`${endpoint}/${id}`, dto, { headers });
   }
 
   delete(id: string): Observable<void> {
-    throw new Error('Method not implemented.');
+    return this.http.delete<void>(`${endpoint}/${id}`, { headers });
   }
 }

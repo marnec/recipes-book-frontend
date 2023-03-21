@@ -1,5 +1,7 @@
-import { Base } from "./base.interface";
+import { BaseI } from "./base.interface";
 
-export interface Recipe extends Base {
-    content: string;
+export interface Recipe extends BaseI {
+    title: string;
+    body: string;
+    servings: number;
 }

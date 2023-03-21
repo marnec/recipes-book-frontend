@@ -1,0 +1,44 @@
+<ng-container *ngIf="form" [formGroup]="form">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="recipes"></ion-back-button>
+      </ion-buttons>
+      <ion-input
+        type="text"
+        [placeholder]="'recipe.toolbar.titlePlaceholder' | translate"
+      ></ion-input>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-item>
+      <ion-label>{{ 'recipe.content.servings' | translate}}</ion-label>
+      <ion-input type="number" placeholder="#" formControlName="servings"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>
+        <h2>{{ 'recipe.content.ingredients.title' | translate }}</h2>
+      </ion-label>
+      <ion-button (click)="openIngredientsList()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-item>
+
+    <!-- <ion-list>
+      <ion-item *ngFor="let ingredient of parsedRecipe?.ingredients">
+        <ion-label>
+          {{ ingredient.name }}
+          {{ ingredient.quantity }}
+          {{ ingredient.units }}
+        </ion-label>
+      </ion-item>
+    </ion-list> -->
+    <ion-item>
+      <ion-label>
+        <h2>{{ 'recipe.content.steps.title' | translate }}</h2>
+      </ion-label>
+      <ion-textarea [autoGrow]="true" formControlName="body"></ion-textarea>
+    </ion-item>
+  </ion-content>
+</ng-container>

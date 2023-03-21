@@ -15,8 +15,8 @@ export class ChoiceModalComponent {
   message!: string;
 
   choices: Choice[] = [
-    { value: true, role: 'confirm' },
     { value: false, role: 'cancel' },
+    { value: true, role: 'confirm' },
   ];
 
   constructor(private modal: ModalController) {}

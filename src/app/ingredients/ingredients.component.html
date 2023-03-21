@@ -1,0 +1,31 @@
+<ion-content>
+  <ion-item fill="outline">
+    <ion-input
+      type="text"
+      [placeholder]="'ingredients.content.search.placeholder' | translate"
+      [formControl]="ingredientSearch"
+    ></ion-input>
+  </ion-item>
+  <ion-list>
+    <ion-item
+      *ngIf="!ingredientSearch.pristine && ingredients"
+      (click)="addIngredient()"
+    >
+      <ion-label>
+        {{
+          "ingredients.content.search.new"
+            | translate : { label: ingredientSearch.value }
+        }}
+      </ion-label>
+      <ion-icon slot="end" name="add"></ion-icon>
+    </ion-item>
+    <ion-item
+      *ngFor="let ingredient of ingredients"
+      (click)="addIngredient(ingredient)"
+    >
+      <ion-label>
+        {{ ingredient.foodName }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
