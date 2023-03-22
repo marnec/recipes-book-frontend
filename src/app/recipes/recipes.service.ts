@@ -7,6 +7,7 @@ import {
   NullablePartial,
   SortOrder,
 } from '../common/crud.service';
+import { BaseI } from '../common/interfaces/base.interface';
 import { PaginatedResult } from '../common/interfaces/paginates-result.interface';
 import { Recipe } from '../common/interfaces/recipe.interface';
 
@@ -48,7 +49,10 @@ export class RecipesService
     });
   }
 
-  save(id: string | null, dto: NullablePartial<Recipe>): Observable<Recipe> {
+  save(
+    id: string | null | undefined,
+    dto: Exclude<NullablePartial<Recipe>, BaseI>
+  ): Observable<Recipe> {
     if (!id) {
       return this.http.post<Recipe>(endpoint, dto);
     }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { first, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
 import { ID_PLACEHOLDER, URLPARAM_ID_KEY } from '../constants';
 import { CrudService } from '../crud.service';
+import { BaseI } from '../interfaces/base.interface';
 import { AsyncComponent } from './async.abstract.component';
 
 @Component({
@@ -13,16 +14,17 @@ import { AsyncComponent } from './async.abstract.component';
 export abstract class EditComponent<E> extends AsyncComponent {
   @Input() entity: E | undefined | null;
 
-
   form:
-    | FormGroup<{ [K in keyof E]: FormControl<E[K] | undefined | null> }>
+    | FormGroup<{
+        [K in keyof Omit<E, 'id'>]: FormControl<E[K] | undefined | null>;
+      }>
     | undefined;
 
   constructor(
     protected route: ActivatedRoute,
     private crudService: CrudService<E>
   ) {
-    super()
+    super();
   }
 
   override ionViewWillEnter() {

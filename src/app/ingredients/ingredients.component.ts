@@ -39,6 +39,7 @@ export class IngredientsComponent extends AsyncComponent {
       )
       .subscribe((ingredients) => {
         this.ingredients = ingredients;
+        console.log(ingredients)
       });
   }
 

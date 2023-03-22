@@ -1,11 +1,11 @@
 import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { BaseI } from './interfaces/base.interface';
 import { PaginatedResult } from './interfaces/paginates-result.interface';
 
 export type NullablePartial<T> = {
   [P in keyof T]?: T[P] | null;
 };
-
 
 export type SortOrder = 'ASC' | 'DESC';
 
@@ -32,7 +32,10 @@ export abstract class CrudService<E, F = NullablePartial<E>> {
     sortOrder: SortOrder | undefined
   ): Observable<PaginatedResult<E>>;
 
-  abstract save(id: string | null, dto: NullablePartial<E>): Observable<E>;
+  abstract save(
+    id: string | null,
+    dto: Exclude<NullablePartial<E>, BaseI>
+  ): Observable<E>;
 
   abstract delete(id: string): Observable<void>;
 
@@ -45,5 +48,4 @@ export abstract class CrudService<E, F = NullablePartial<E>> {
 
     return params;
   }
-  
 }

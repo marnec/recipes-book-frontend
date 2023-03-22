@@ -1,11 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Title</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      type="text"
+      [placeholder]="'ingredients.content.search.placeholder' | translate"
+      [formControl]="ingredientSearch"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
-  <ion-item fill="outline">
+  <!-- <ion-item fill="outline">
     <ion-input
       type="text"
       [placeholder]="'ingredients.content.search.placeholder' | translate"
       [formControl]="ingredientSearch"
     ></ion-input>
-  </ion-item>
+  </ion-item> -->
   <ion-list>
     <ion-item
       *ngIf="!ingredientSearch.pristine && ingredients"

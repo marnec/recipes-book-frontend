@@ -1,3 +1,3 @@
 export interface BaseI {
-    id?: string;
+    id: string;
 }

@@ -2,18 +2,9 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import {
-  debounceTime,
-  filter,
-  first,
-  Observable,
-  of,
-  Subject,
-  switchMap,
-  takeUntil,
-} from 'rxjs';
+import { omit, pick } from 'radash';
+import { debounceTime, switchMap, takeUntil } from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
-import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
 import { IngredientsService } from '../ingredients.service';
@@ -38,21 +29,27 @@ export class RecipeEditPage extends EditComponent<Recipe> {
     this.form = new FormGroup({
       body: new FormControl(this.entity?.body),
       title: new FormControl(this.entity?.title),
-      servings: new FormControl(this.entity?.servings)
+      servings: new FormControl(this.entity?.servings),
     });
 
     this.form.valueChanges
-      .pipe(takeUntil(this.unsubscribe$), debounceTime(200))
-      .subscribe((value) => {});
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        debounceTime(200),
+        switchMap((value) => {
+          return this.recipesService.save(this.entity?.id, value);
+        })
+      )
+      .subscribe();
   }
 
   public async openIngredientsList() {
     const modal = await this.modal.create({
       component: IngredientsComponent,
+      initialBreakpoint: 0.75,
     });
     await modal.present();
     const { data, role } = await modal.onDidDismiss();
-    console.log(data);
   }
 
   ionViewWillLeave() {
