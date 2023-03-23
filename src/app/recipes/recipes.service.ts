@@ -7,7 +7,12 @@ import {
   NullablePartial,
   SortOrder,
 } from '../common/crud.service';
+import {
+  AssociateIngredientDto,
+  AssociateNewIngredientDto,
+} from '../common/interfaces/associate-ingredient.dto';
 import { BaseI } from '../common/interfaces/base.interface';
+import { IngredientSearchResult } from '../common/interfaces/nutritionix/search-ingredient-result.interface';
 import { PaginatedResult } from '../common/interfaces/paginates-result.interface';
 import { Recipe } from '../common/interfaces/recipe.interface';
 
@@ -57,6 +62,26 @@ export class RecipesService
       return this.http.post<Recipe>(endpoint, dto);
     }
     return this.http.put<Recipe>(`${endpoint}/${id}`, dto, { headers });
+  }
+
+  associateIngredient(
+    recipeId: string,
+    ingredient: Partial<IngredientSearchResult>
+  ): Observable<any> {
+    return this.http.put(`${endpoint}/${recipeId}/ingredients`, ingredient, {
+      headers,
+    });
+  }
+
+  associateNewIngredient(
+    recipeId: string,
+    newIngredient: Pick<IngredientSearchResult, 'foodName'>
+  ): Observable<any> {
+    return this.http.post(
+      `${endpoint}/${recipeId}/ingredients`,
+      newIngredient,
+      { headers }
+    );
   }
 
   delete(id: string): Observable<void> {

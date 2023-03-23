@@ -2,9 +2,16 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { omit, pick } from 'radash';
-import { debounceTime, switchMap, takeUntil } from 'rxjs';
+import {
+  debounceTime,
+  firstValueFrom,
+  Observable,
+  switchMap,
+  takeUntil,
+} from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
+import { IngredientModalDismissRoles } from 'src/app/common/constants';
+import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
 import { IngredientsService } from '../ingredients.service';
@@ -49,7 +56,26 @@ export class RecipeEditPage extends EditComponent<Recipe> {
       initialBreakpoint: 0.75,
     });
     await modal.present();
-    const { data, role } = await modal.onDidDismiss();
+
+    const { data, role } = await modal.onDidDismiss<IngredientSearchResult>();
+    const recipeId = this.entity?.id as string;
+    const ingredient = data as IngredientSearchResult;
+
+    let associationResult: Observable<any>;
+    if (role === IngredientModalDismissRoles.create) {
+      associationResult = this.recipesService.associateNewIngredient(
+        recipeId,
+        ingredient
+      );
+    } else {
+      associationResult = this.recipesService.associateIngredient(
+        recipeId,
+        ingredient
+      );
+    }
+
+    await firstValueFrom(associationResult);
+    await firstValueFrom(this.retrieveEntityById());
   }
 
   ionViewWillLeave() {

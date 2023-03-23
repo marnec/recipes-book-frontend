@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 import { debounceTime, filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { AsyncComponent } from '../common/components/async.abstract.component';
+import { IngredientModalDismissRoles } from '../common/constants';
 import { IngredientSearchResult } from '../common/interfaces/nutritionix/search-ingredient-result.interface';
 import { IngredientsService } from '../recipes/ingredients.service';
 
@@ -15,10 +17,12 @@ export class IngredientsComponent extends AsyncComponent {
 
   ingredients: IngredientSearchResult[] | undefined;
 
-  constructor(private ingredientsService: IngredientsService) {
-    super()
+  constructor(
+    private ingredientsService: IngredientsService,
+    private modal: ModalController
+  ) {
+    super();
   }
-
 
   ionViewDidEnter() {
     this.searchIngredientOnInputChange();
@@ -39,17 +43,21 @@ export class IngredientsComponent extends AsyncComponent {
       )
       .subscribe((ingredients) => {
         this.ingredients = ingredients;
-        console.log(ingredients)
       });
   }
 
   addIngredient(ingredient?: IngredientSearchResult) {
-
-    if (!ingredient) {
-      // create
+    if (!this.ingredientSearch.value) {
+      throw new Error('ingredient name should be defined');
     }
 
-    // save
+    if (!ingredient) {
+      this.modal.dismiss(
+        { foodName: this.ingredientSearch.value },
+        IngredientModalDismissRoles.create
+      );
+    }
 
+    this.modal.dismiss(ingredient, IngredientModalDismissRoles.select);
   }
 }
