@@ -9,13 +9,14 @@ import {
   Observable,
   of,
   switchMap,
-  takeUntil
+  takeUntil,
 } from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
 import { IngredientModalDismissRoles } from 'src/app/common/constants';
 import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
+import { IngredientsService } from '../ingredients.service';
 import { RecipesService } from '../recipes.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class RecipeEditPage extends EditComponent<Recipe> {
   constructor(
     private modal: ModalController,
     private recipesService: RecipesService,
+    private ingredientsService: IngredientsService,
     protected override route: ActivatedRoute
   ) {
     super(route, recipesService);
@@ -62,31 +64,41 @@ export class RecipeEditPage extends EditComponent<Recipe> {
       .subscribe();
   }
 
-  public async openIngredientsList() {
+  public async findIngredient(prompt?: string) {
+    if (!this.entity?.id) {
+      return;
+    }
+
     const modal = await this.modal.create({
       component: IngredientsComponent,
+      componentProps: { prompt },
       initialBreakpoint: 0.75,
     });
     await modal.present();
-
     const { data, role } = await modal.onDidDismiss<IngredientSearchResult>();
-    const recipeId = this.entity?.id as string;
-    const ingredient = data as IngredientSearchResult;
 
-    let associationResult: Observable<any>;
-    if (role === IngredientModalDismissRoles.create) {
-      associationResult = this.recipesService.associateNewIngredient(
-        recipeId,
-        ingredient
+    if (role === IngredientModalDismissRoles.cancel || !data) {
+      return;
+    }
+
+    if (role === IngredientModalDismissRoles.link) {
+      const ingredientId = this.entity.ingredients.find(
+        (ingredient) => ingredient.name === prompt
+      );
+
+      if (!ingredientId) {
+        return;
+      }
+
+      await firstValueFrom(
+        this.ingredientsService.linkIngredient(ingredientId, data)
       );
     } else {
-      associationResult = this.recipesService.associateIngredient(
-        recipeId,
-        ingredient
+      await firstValueFrom(
+        this.recipesService.associateIngredient(this.entity.id, data)
       );
     }
 
-    await firstValueFrom(associationResult);
     await firstValueFrom(this.retrieveEntityById());
   }
 

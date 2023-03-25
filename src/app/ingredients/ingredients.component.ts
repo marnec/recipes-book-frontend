@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { debounceTime, filter, of, Subject, switchMap, takeUntil } from 'rxjs';
@@ -12,7 +12,12 @@ import { IngredientsService } from '../recipes/ingredients.service';
   templateUrl: './ingredients.component.html',
   styleUrls: ['./ingredients.component.scss'],
 })
-export class IngredientsComponent extends AsyncComponent {
+export class IngredientsComponent
+  extends AsyncComponent
+  implements AfterViewInit
+{
+  @Input() prompt = '';
+
   ingredientSearch = new FormControl<string>('');
 
   ingredients: IngredientSearchResult[] | undefined;
@@ -24,7 +29,8 @@ export class IngredientsComponent extends AsyncComponent {
     super();
   }
 
-  ionViewDidEnter() {
+  ngAfterViewInit(): void {
+    this.unsubscribe$ = new Subject();
     this.searchIngredientOnInputChange();
   }
 
@@ -44,20 +50,26 @@ export class IngredientsComponent extends AsyncComponent {
       .subscribe((ingredients) => {
         this.ingredients = ingredients;
       });
+
+    this.ingredientSearch.setValue(this.prompt);
   }
 
-  addIngredient(ingredient?: IngredientSearchResult) {
+  addIngredient(ingredient?: Partial<IngredientSearchResult>) {
     if (!this.ingredientSearch.value) {
       throw new Error('ingredient name should be defined');
     }
 
+    let role: IngredientModalDismissRoles;
     if (!ingredient) {
-      this.modal.dismiss(
-        { foodName: this.ingredientSearch.value },
-        IngredientModalDismissRoles.create
-      );
+      ingredient = {
+        foodName: this.ingredientSearch.value,
+      };
+      role = IngredientModalDismissRoles.create;
+    } else if (this.prompt) {
+      role = IngredientModalDismissRoles.link;
+    } else {
+      role = IngredientModalDismissRoles.select;
     }
-
-    this.modal.dismiss(ingredient, IngredientModalDismissRoles.select);
+    this.modal.dismiss(ingredient, role);
   }
 }

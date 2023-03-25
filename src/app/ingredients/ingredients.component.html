@@ -20,7 +20,7 @@
   </ion-item> -->
   <ion-list>
     <ion-item
-      *ngIf="!ingredientSearch.pristine && ingredients"
+      *ngIf="!ingredientSearch?.pristine && ingredients && !prompt"
       (click)="addIngredient()"
     >
       <ion-label>

@@ -63,25 +63,30 @@ export class RecipesService
   associateIngredient(
     recipeId: string,
     ingredient: Partial<IngredientSearchResult>
-  ): Observable<any> {
-    return this.http.put(`${endpoint}/${recipeId}/ingredients`, ingredient, {
-      headers,
-    });
-  }
+  ): Observable<Recipe> {
+    if ('tagId' in ingredient) {
+      return this.http.put<Recipe>(
+        `${endpoint}/${recipeId}/ingredients`,
+        ingredient,
+        {
+          headers,
+        }
+      );
+    }
 
-  associateNewIngredient(
-    recipeId: string,
-    newIngredient: Pick<IngredientSearchResult, 'foodName'>
-  ): Observable<any> {
-    return this.http.post(
+    return this.http.post<Recipe>(
       `${endpoint}/${recipeId}/ingredients`,
-      newIngredient,
-      { headers }
+      ingredient,
+      {
+        headers,
+      }
     );
   }
 
   removeIngredient(id: string, ingredientId: string): Observable<Recipe> {
-    return this.http.delete<Recipe>(`${endpoint}/${id}/ingredients/${ingredientId}`);
+    return this.http.delete<Recipe>(
+      `${endpoint}/${id}/ingredients/${ingredientId}`
+    );
   }
 
   delete(id: string): Observable<void> {
