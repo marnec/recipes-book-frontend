@@ -27,11 +27,6 @@ export abstract class EditComponent<E> extends AsyncComponent {
     super();
   }
 
-  override ionViewWillEnter() {
-    this.unsubscribe$ = new Subject<null>();
-    this.retrieveEntityById().pipe(first()).subscribe();
-  }
-
   retrieveEntityById(): Observable<E | null> {
     return this.route.paramMap.pipe(
       first(),

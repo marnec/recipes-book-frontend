@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -7,10 +7,6 @@ import {
   NullablePartial,
   SortOrder,
 } from '../common/crud.service';
-import {
-  AssociateIngredientDto,
-  AssociateNewIngredientDto,
-} from '../common/interfaces/associate-ingredient.dto';
 import { BaseI } from '../common/interfaces/base.interface';
 import { IngredientSearchResult } from '../common/interfaces/nutritionix/search-ingredient-result.interface';
 import { PaginatedResult } from '../common/interfaces/paginates-result.interface';
@@ -36,7 +32,7 @@ export class RecipesService
   }
 
   find(
-    filter: Partial<Recipe>,
+    filter: Partial<Omit<Recipe, 'ingredients'>>,
     page: number,
     size: number,
     sortField: keyof Recipe,
@@ -82,6 +78,10 @@ export class RecipesService
       newIngredient,
       { headers }
     );
+  }
+
+  removeIngredient(id: string, ingredientId: string): Observable<Recipe> {
+    return this.http.delete<Recipe>(`${endpoint}/${id}/ingredients/${ingredientId}`);
   }
 
   delete(id: string): Observable<void> {

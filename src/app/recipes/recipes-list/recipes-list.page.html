@@ -17,16 +17,15 @@
         >
       </ion-item>
       <ion-item-options side="start">
-        <!-- <ion-item-option color="primary" (click)="share(item)">Share</ion-item-option> -->
+        <ion-item-option
+          ><ion-icon slot="start" name="share"></ion-icon
+        ></ion-item-option>
       </ion-item-options>
-      <ion-item-options side="start">
+      <ion-item-options side="end">
         <ion-item-option
           (click)="delete(recipe, 'recipes.content.confirmDelete')"
         >
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-item-option>
-        <ion-item-option [routerLink]="recipe.id">
-          <ion-icon name="pencil"></ion-icon>
+          <ion-icon name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

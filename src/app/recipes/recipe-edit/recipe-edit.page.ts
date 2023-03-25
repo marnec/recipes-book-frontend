@@ -4,17 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import {
   debounceTime,
+  filter,
   firstValueFrom,
   Observable,
+  of,
   switchMap,
-  takeUntil,
+  takeUntil
 } from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
 import { IngredientModalDismissRoles } from 'src/app/common/constants';
 import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
-import { IngredientsService } from '../ingredients.service';
 import { RecipesService } from '../recipes.service';
 
 @Component({
@@ -26,7 +27,6 @@ export class RecipeEditPage extends EditComponent<Recipe> {
   constructor(
     private modal: ModalController,
     private recipesService: RecipesService,
-    private ingredientsService: IngredientsService,
     protected override route: ActivatedRoute
   ) {
     super(route, recipesService);
@@ -34,15 +34,27 @@ export class RecipeEditPage extends EditComponent<Recipe> {
 
   ionViewDidEnter() {
     this.form = new FormGroup({
-      body: new FormControl(this.entity?.body),
-      title: new FormControl(this.entity?.title),
-      servings: new FormControl(this.entity?.servings),
+      body: new FormControl(),
+      title: new FormControl(),
+      servings: new FormControl(),
+      ingredients: new FormControl(),
     });
 
-    this.form.valueChanges
+    this.retrieveEntityById()
       .pipe(
-        takeUntil(this.unsubscribe$),
-        debounceTime(200),
+        switchMap((recipe) => {
+          if (!recipe || !this.form) {
+            return of(null);
+          }
+
+          this.setValueOnRecipeFetched(recipe);
+
+          return this.form.valueChanges.pipe(
+            takeUntil(this.unsubscribe$),
+            debounceTime(200)
+          );
+        }),
+        filter(Boolean),
         switchMap((value) => {
           return this.recipesService.save(this.entity?.id, value);
         })
@@ -76,6 +88,34 @@ export class RecipeEditPage extends EditComponent<Recipe> {
 
     await firstValueFrom(associationResult);
     await firstValueFrom(this.retrieveEntityById());
+  }
+
+  private setValueOnRecipeFetched(recipe: Recipe) {
+    this.form?.setValue(
+      {
+        body: recipe?.body,
+        title: recipe?.title,
+        servings: recipe?.servings,
+        ingredients: recipe?.ingredients,
+      },
+      { emitEvent: false }
+    );
+  }
+
+  public removeIngredient(ingredientId: string) {
+    if (!this.entity?.id) {
+      return;
+    }
+
+    this.recipesService
+      .removeIngredient(this.entity?.id, ingredientId)
+      .pipe(
+        switchMap(() => this.retrieveEntityById()),
+        filter(Boolean)
+      )
+      .subscribe({
+        next: (recipe) => this.setValueOnRecipeFetched(recipe),
+      });
   }
 
   ionViewWillLeave() {
