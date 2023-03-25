@@ -82,16 +82,16 @@ export class RecipeEditPage extends EditComponent<Recipe> {
     }
 
     if (role === IngredientModalDismissRoles.link) {
-      const ingredientId = this.entity.ingredients.find(
+      const unlinkedIngredient = this.entity.ingredients.find(
         (ingredient) => ingredient.name === prompt
       );
 
-      if (!ingredientId) {
+      if (!unlinkedIngredient) {
         return;
       }
 
       await firstValueFrom(
-        this.ingredientsService.linkIngredient(ingredientId, data)
+        this.ingredientsService.linkIngredient(unlinkedIngredient.id, data)
       );
     } else {
       await firstValueFrom(

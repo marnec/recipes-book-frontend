@@ -28,7 +28,7 @@ export class IngredientsService {
     });
   }
 
-  linkIngredient(ingredientId: Ingredient, data: IngredientSearchResult) {
+  linkIngredient(ingredientId: string, data: IngredientSearchResult) {
     return this.http.post(`${endpoint}/${ingredientId}`, data, { headers });
   }
 }
