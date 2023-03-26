@@ -20,7 +20,7 @@
       formControlName="servings"
     ></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item lines="full">
     <ion-label>
       <h2>{{ 'recipe.content.ingredients.title' | translate }}</h2>
     </ion-label>
@@ -34,34 +34,13 @@
       [disabled]="false"
       (ionItemReorder)="handleReorder($any($event))"
     >
-      <ion-item-sliding *ngFor="let recipeIngredient of entity?.ingredients">
-        <ion-item-options side="end">
-          <ion-item-option
-            (click)="removeIngredient(recipeIngredient.ingredient.id)"
-          >
-            <ion-icon slot="start" name="trash"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-        <ion-item>
-          <ion-label> {{ recipeIngredient.ingredient.name }} </ion-label>
-          <ion-reorder slot="start"></ion-reorder>
-          <ion-spinner
-            name="crescent"
-            *ngIf="recipeIngredient.ingredient.isPlaceholder"
-          ></ion-spinner>
-          <ion-icon
-            *ngIf="!recipeIngredient.ingredient.externalId && !recipeIngredient.ingredient.nutrientsSourceId"
-            slot="end"
-            name="alert-circle"
-            (click)="findIngredient(recipeIngredient.ingredient.name)"
-          ></ion-icon>
-          <ion-icon
-            *ngIf="recipeIngredient.ingredient.nutrientsSourceId"
-            slot="end"
-            name="git-branch-outline"
-          ></ion-icon>
-        </ion-item>
-      </ion-item-sliding>
+      <app-recipe-ingredient-item
+        *ngFor="let recipeIngredient of entity?.ingredients"
+        [ingredient]="recipeIngredient.ingredient"
+        (ingredientRemove)="removeIngredient($event)"
+        (ingredientConnect)="findIngredient($event)"
+      >
+      </app-recipe-ingredient-item>
     </ion-reorder-group>
   </ion-list>
   <ion-item>

@@ -10,6 +10,7 @@ import { AppCommonModule } from '../common/common.module';
 import { RecipesPage } from './recipes-list/recipes-list.page';
 import { RecipeEditPage } from './recipe-edit/recipe-edit.page';
 import { IngredientsModule } from '../ingredients/ingredients.module';
+import { RecipeIngredientItemComponent } from './recipe-ingredient-item/recipe-ingredient-item.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import { IngredientsModule } from '../ingredients/ingredients.module';
     RecipesPageRoutingModule,
     IngredientsModule
   ],
-  declarations: [RecipesPage, RecipeEditPage]
+  declarations: [RecipesPage, RecipeEditPage, RecipeIngredientItemComponent]
 })
 export class RecipesPageModule {}

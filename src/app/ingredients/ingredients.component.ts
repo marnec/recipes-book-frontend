@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ModalController } from '@ionic/angular';
+import { IonSearchbar, ModalController } from '@ionic/angular';
 import { debounceTime, filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { AsyncComponent } from '../common/components/async.abstract.component';
 import { IngredientModalDismissRoles } from '../common/constants';
@@ -16,6 +16,7 @@ export class IngredientsComponent
   extends AsyncComponent
   implements AfterViewInit
 {
+  @ViewChild('searchbar') searchbar!: IonSearchbar;
   @Input() prompt = '';
 
   ingredientSearch = new FormControl<string>('');
@@ -31,7 +32,12 @@ export class IngredientsComponent
 
   ngAfterViewInit(): void {
     this.unsubscribe$ = new Subject();
+    
     this.searchIngredientOnInputChange();
+  }
+
+  ionViewDidEnter() {
+    this.searchbar.setFocus();
   }
 
   private searchIngredientOnInputChange() {
