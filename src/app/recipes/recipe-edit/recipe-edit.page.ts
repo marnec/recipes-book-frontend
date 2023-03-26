@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ItemReorderEventDetail, ModalController } from '@ionic/angular';
 import {
   debounceTime,
   filter,
@@ -12,7 +12,10 @@ import {
   takeUntil,
 } from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
-import { IngredientModalDismissRoles } from 'src/app/common/constants';
+import {
+  ID_PLACEHOLDER,
+  IngredientModalDismissRoles,
+} from 'src/app/common/constants';
 import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
@@ -83,8 +86,8 @@ export class RecipeEditPage extends EditComponent<Recipe> {
 
     if (role === IngredientModalDismissRoles.link) {
       const unlinkedIngredient = this.entity.ingredients.find(
-        (ingredient) => ingredient.name === prompt
-      );
+        (recipeIngredient) => recipeIngredient.ingredient.name === prompt
+      )?.ingredient;
 
       if (!unlinkedIngredient) {
         return;
@@ -94,6 +97,17 @@ export class RecipeEditPage extends EditComponent<Recipe> {
         this.ingredientsService.linkIngredient(unlinkedIngredient.id, data)
       );
     } else {
+      this.entity.ingredients.push({
+        order:
+          (Math.max(...this.entity.ingredients.map((i) => i.order)) || 0) + 1,
+        ingredient: {
+          id: ID_PLACEHOLDER,
+          isPlaceholder: true,
+          name: data.foodName,
+          externalId: data.tagId,
+          set: -1,
+        },
+      });
       await firstValueFrom(
         this.recipesService.associateIngredient(this.entity.id, data)
       );
@@ -128,6 +142,23 @@ export class RecipeEditPage extends EditComponent<Recipe> {
       .subscribe({
         next: (recipe) => this.setValueOnRecipeFetched(recipe),
       });
+  }
+
+  async handleReorder(ev: CustomEvent<ItemReorderEventDetail>) {
+    if (!this.entity) {
+      return;
+    }
+    const ingredientId = this.entity.ingredients[ev.detail.from].ingredient.id;
+
+    await firstValueFrom(
+      this.recipesService.reorderIngredient(
+        this.entity.id,
+        ingredientId,
+        ev.detail.from,
+        ev.detail.to
+      )
+    );
+    ev.detail.complete();
   }
 
   ionViewWillLeave() {

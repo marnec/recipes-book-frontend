@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { filter, first, firstValueFrom, Subject } from 'rxjs';
+import { filter, first, firstValueFrom, Observable, Subject } from 'rxjs';
 import { ChoiceModalComponent } from './choice-modal/choice-modal.component';
 import { CrudService, SortOrder } from '../crud.service';
 import { BaseI } from '../interfaces/base.interface';
 import { AsyncComponent } from './async.abstract.component';
+import { PaginatedResult } from '../interfaces/paginates-result.interface';
 
 export class PaginationConfig<E> {
   skip!: number;
@@ -56,8 +57,6 @@ export abstract class ListComponent<
     this.lazyLoad();
   }
 
-  abstract addFilters(filters: F): void;
-
   private getDefaultPage(): PaginationConfig<E> {
     return <PaginationConfig<E>>{
       skip: 0,
@@ -68,9 +67,9 @@ export abstract class ListComponent<
   }
 
   lazyLoad(
-    config: PaginationConfig<E> = this.getDefaultPage(),
-    filters?: F
-  ): void {
+    filters?: F,
+    config: PaginationConfig<E> = this.getDefaultPage()
+  ): Observable<PaginatedResult<E>> {
     this.loading = true;
 
     const { pageSize, skip, sortField, sortOrder } = config;
@@ -81,11 +80,9 @@ export abstract class ListComponent<
     this.sortField = sortField;
     this.sortOrder = sortOrder;
 
-    if (filters) {
-      this.addFilters(filters);
-    }
+    this.filter = filters;
 
-    this.entityService
+    return this.entityService
       .find(
         this.filter,
         this.page,
@@ -93,15 +90,13 @@ export abstract class ListComponent<
         this.sortField,
         this.sortOrder
       )
-      .pipe(
-        first(),
-        filter((paginatedResult) => !!paginatedResult)
-      )
-      .subscribe(({ content, totalElements }) => {
-        this.entities = content;
-        this.totalRecords = totalElements;
-        this.loading = false;
-      });
+      .pipe(first(), filter(Boolean));
+  }
+
+  lazyLoadSubscriber({ content, totalElements }: PaginatedResult<E>) {
+    this.entities = content;
+    this.totalRecords = totalElements;
+    this.loading = false;
   }
 
   async delete(entity: E, message: string) {
