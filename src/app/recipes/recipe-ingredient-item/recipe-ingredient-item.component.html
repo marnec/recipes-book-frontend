@@ -1,46 +1,60 @@
 <ion-item-sliding>
   <ion-item-options side="end">
-    <ion-item-option (click)="ingredientRemove.emit(ingredient.id)">
+    <ion-item-option (click)="ingredientRemove.emit(ingredient.ingredient.id)">
       <ion-icon slot="start" name="trash"></ion-icon>
     </ion-item-option>
   </ion-item-options>
   <ion-item *ngIf="ingredientForm" [formGroup]="ingredientForm" lines="none">
-    <ion-item #nameInput lines="none">
-      <ion-input
-        type="text"
-        formControlName="name"
-        (ionBlur)="nameInput.fill = undefined; nameInput.lines = 'none'"
-        (ionFocus)="nameInput.fill = 'outline'; nameInput.lines = 'full'"
-      ></ion-input>
-    </ion-item>
-    <ion-item #amountInput lines="none">
-      <ion-input
-        type="number"
-        formControlName="amount"
-        (ionBlur)="amountInput.fill = undefined; amountInput.lines = 'none'"
-        (ionFocus)="amountInput.fill = 'outline'; amountInput.lines = 'full'"
-      ></ion-input>
-    </ion-item>
-    <ion-item #unitInput lines="none">
-      <ion-input
-        type="text"
-        formControlName="unit"
-        (ionBlur)="unitInput.fill = undefined; unitInput.lines = 'none'"
-        (ionFocus)="unitInput.fill = 'outline'; unitInput.lines = 'full'"
-      ></ion-input>
-    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6">
+          <ion-item lines="none">
+            <ion-label>
+              {{ ingredient.ingredient.name }}
+            </ion-label>
+            <ion-icon
+              *ngIf="
+                !ingredient.ingredient.externalId &&
+                !ingredient.ingredient.nutrientsSourceId
+              "
+              slot="end"
+              name="alert-circle"
+              (click)="ingredientConnect.emit(ingredient.ingredient.name)"
+            ></ion-icon>
+            <ion-icon
+              *ngIf="ingredient.ingredient.nutrientsSourceId"
+              slot="end"
+              name="git-branch-outline"
+            ></ion-icon>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-item #amountInput lines="outline">
+            <ion-input
+              class="ion-text-end"
+              type="number"
+              formControlName="quantity"
+              placeholder="#"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="2">
+          <ion-item #unitInput lines="outline">
+            <ion-input
+              placeholder="u.m."
+              type="text"
+              formControlName="unit"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="1">
+          <ion-spinner
+            name="crescent"
+            *ngIf="ingredient.ingredient.isPlaceholder"
+          ></ion-spinner>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
     <ion-reorder slot="start"></ion-reorder>
-    <ion-spinner name="crescent" *ngIf="ingredient.isPlaceholder"></ion-spinner>
-    <ion-icon
-      *ngIf="!ingredient.externalId && !ingredient.nutrientsSourceId"
-      slot="end"
-      name="alert-circle"
-      (click)="ingredientConnect.emit(ingredient.name)"
-    ></ion-icon>
-    <ion-icon
-      *ngIf="ingredient.nutrientsSourceId"
-      slot="end"
-      name="git-branch-outline"
-    ></ion-icon>
   </ion-item>
 </ion-item-sliding>

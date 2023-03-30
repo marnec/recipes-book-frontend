@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
-import { User } from '../common/interfaces/user.interface';
+import { FirebaseUser } from '../common/interfaces/user.interface';
+import { routes } from '../app-routing.module';
 
 @Component({
   selector: 'app-home',
@@ -9,13 +10,11 @@ import { User } from '../common/interfaces/user.interface';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  constructor(
-    private auth: AngularFireAuth,
-  ) {}
+  sideMenuItems = routes.filter((route) => route.data?.['showInSideMenu']);
 
-  get user$(): Observable<User | null> {
+  constructor(private auth: AngularFireAuth) {}
+
+  get user$(): Observable<FirebaseUser | null> {
     return this.auth.user;
   }
-
-
 }

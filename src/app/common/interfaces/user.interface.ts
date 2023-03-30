@@ -1,4 +1,4 @@
-export interface User {
+export interface FirebaseUser {
   apiKey?: string;
   appName?: string;
   createdAt?: string;
@@ -10,4 +10,34 @@ export interface User {
   phoneNumber: string | null;
   photoURL: string | null;
   uid: string;
+}
+
+export interface User {
+  id: string;
+
+  uid: string;
+
+  email?: string;
+
+  userName?: string;
+
+  avatar: string;
+
+  gender?: string;
+
+  weight?: number;
+
+  height?: number;
+
+  age?: number;
+
+  activityLevel?: string;
+
+  created: Date;
+
+  modified: Date;
+
+  // language?: Language;
+
+  // recipes: UserRecipe[];
 }

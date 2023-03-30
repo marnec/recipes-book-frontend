@@ -1,9 +1,15 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IonSearchbar, ModalController } from '@ionic/angular';
 import { debounceTime, filter, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { AsyncComponent } from '../common/components/async.abstract.component';
-import { IngredientModalDismissRoles } from '../common/constants';
+import { DEFAULT_DEBOUNCE, IngredientModalDismissRoles } from '../common/constants';
 import { IngredientSearchResult } from '../common/interfaces/nutritionix/search-ingredient-result.interface';
 import { IngredientsService } from '../recipes/ingredients.service';
 
@@ -32,7 +38,7 @@ export class IngredientsComponent
 
   ngAfterViewInit(): void {
     this.unsubscribe$ = new Subject();
-    
+
     this.searchIngredientOnInputChange();
   }
 
@@ -44,7 +50,7 @@ export class IngredientsComponent
     this.ingredientSearch.valueChanges
       .pipe(
         takeUntil(this.unsubscribe$),
-        debounceTime(200),
+        debounceTime(DEFAULT_DEBOUNCE),
         switchMap((searchInput) => {
           if (!searchInput) {
             return of(null);
@@ -54,7 +60,13 @@ export class IngredientsComponent
         filter(Boolean)
       )
       .subscribe((ingredients) => {
-        this.ingredients = ingredients;
+        this.ingredients = ingredients.filter(
+          ({ servingWeightGrams }) =>
+            servingWeightGrams !== undefined && servingWeightGrams !== null
+        );
+        console.info(
+          `filtered out ${ingredients.length - this.ingredients.length}`
+        );
       });
 
     this.ingredientSearch.setValue(this.prompt);

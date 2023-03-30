@@ -11,7 +11,9 @@ import {
 import { BaseI } from '../common/interfaces/base.interface';
 import { IngredientSearchResult } from '../common/interfaces/nutritionix/search-ingredient-result.interface';
 import { PaginatedResult } from '../common/interfaces/paginates-result.interface';
+import { RecipeIngredient } from '../common/interfaces/recipe-ingredient.interface';
 import { Recipe } from '../common/interfaces/recipe.interface';
+import { IngredientQuantity } from './recipe-ingredient-item/recipe-ingredient-item.component';
 import { RecipeFilter } from './recipes-list/recipes-list.page';
 
 const endpoint = `${environment.api}/recipes`;
@@ -91,14 +93,35 @@ export class RecipesService
     );
   }
 
+  setIngredientQuantity(
+    id: string,
+    ingredientId: string,
+    quantity: Omit<IngredientQuantity, 'id'>
+  ): Observable<RecipeIngredient> {
+    return this.http.patch<RecipeIngredient>(
+      `${endpoint}/${id}/ingredients/${ingredientId}`,
+      quantity,
+      { headers }
+    );
+  }
+
   removeIngredient(id: string, ingredientId: string): Observable<Recipe> {
     return this.http.delete<Recipe>(
       `${endpoint}/${id}/ingredients/${ingredientId}`
     );
   }
 
-  reorderIngredient(id: string, ingredientId: string, from: number, to: number) {
-    return this.http.post(`${endpoint}/${id}`, { from, to, ingredientId }, { headers });
+  reorderIngredient(
+    id: string,
+    ingredientId: string,
+    from: number,
+    to: number
+  ) {
+    return this.http.post(
+      `${endpoint}/${id}`,
+      { from, to, ingredientId },
+      { headers }
+    );
   }
 
   delete(id: string): Observable<void> {

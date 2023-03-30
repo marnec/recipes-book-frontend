@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { filter, Observable, switchMap } from 'rxjs';
-import { AuthService } from './auth.service';
-import { User } from './common/interfaces/user.interface';
+import { FirebaseUser } from './common/interfaces/user.interface';
+import { UserService } from './user/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +12,10 @@ import { User } from './common/interfaces/user.interface';
 export class AppComponent {
   constructor(
     private auth: AngularFireAuth,
-    private authService: AuthService
+    private userService: UserService
   ) {}
 
-  get user$(): Observable<User | null> {
+  get user$(): Observable<FirebaseUser | null> {
     return this.auth.user;
   }
 
@@ -23,7 +23,7 @@ export class AppComponent {
     this.user$
       .pipe(
         filter(Boolean),
-        switchMap((user) => this.authService.checkUserExists(user.uid))
+        switchMap((user) => this.userService.upsertUser(user.uid))
       )
       .subscribe();
   }

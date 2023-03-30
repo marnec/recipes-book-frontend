@@ -1,25 +1,27 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ItemReorderEventDetail, ModalController } from '@ionic/angular';
+import { omit } from 'radash';
 import {
   debounceTime,
   filter,
   firstValueFrom,
-  Observable,
   of,
   switchMap,
-  takeUntil,
+  takeUntil
 } from 'rxjs';
 import { EditComponent } from 'src/app/common/components/edit.abstract.component';
 import {
+  DEFAULT_DEBOUNCE,
   ID_PLACEHOLDER,
-  IngredientModalDismissRoles,
+  IngredientModalDismissRoles
 } from 'src/app/common/constants';
 import { IngredientSearchResult } from 'src/app/common/interfaces/nutritionix/search-ingredient-result.interface';
 import { Recipe } from 'src/app/common/interfaces/recipe.interface';
 import { IngredientsComponent } from 'src/app/ingredients/ingredients.component';
 import { IngredientsService } from '../ingredients.service';
+import { IngredientQuantity } from '../recipe-ingredient-item/recipe-ingredient-item.component';
 import { RecipesService } from '../recipes.service';
 
 @Component({
@@ -27,7 +29,10 @@ import { RecipesService } from '../recipes.service';
   templateUrl: './recipe-edit.page.html',
   styleUrls: ['./recipe-edit.page.scss'],
 })
-export class RecipeEditPage extends EditComponent<Recipe> {
+export class RecipeEditPage extends EditComponent<
+  Recipe,
+  'id' | 'ingredients'
+> {
   constructor(
     private modal: ModalController,
     private recipesService: RecipesService,
@@ -39,10 +44,9 @@ export class RecipeEditPage extends EditComponent<Recipe> {
 
   ionViewDidEnter() {
     this.form = new FormGroup({
-      body: new FormControl(),
-      title: new FormControl(),
-      servings: new FormControl(),
-      ingredients: new FormControl(),
+      body: new FormControl<string | null>(null),
+      title: new FormControl<string | null>(null),
+      servings: new FormControl<number | null>(null, [Validators.min(0)]),
     });
 
     this.retrieveEntityById()
@@ -56,15 +60,16 @@ export class RecipeEditPage extends EditComponent<Recipe> {
 
           return this.form.valueChanges.pipe(
             takeUntil(this.unsubscribe$),
-            debounceTime(200)
+            debounceTime(DEFAULT_DEBOUNCE)
           );
         }),
+        filter(() => this.form.valid),
         filter(Boolean),
         switchMap((value) => {
           return this.recipesService.save(this.entity?.id, value);
         })
       )
-      .subscribe();
+      .subscribe({ next: (recipe) => (this.entity = recipe) });
   }
 
   public async findIngredient(prompt?: string) {
@@ -98,6 +103,7 @@ export class RecipeEditPage extends EditComponent<Recipe> {
       );
     } else {
       this.entity.ingredients.push({
+        ingredientId: ID_PLACEHOLDER,
         order:
           (Math.max(...this.entity.ingredients.map((i) => i.order)) || 0) + 1,
         ingredient: {
@@ -117,12 +123,11 @@ export class RecipeEditPage extends EditComponent<Recipe> {
   }
 
   private setValueOnRecipeFetched(recipe: Recipe) {
-    this.form?.setValue(
+    this.form?.patchValue(
       {
         body: recipe?.body,
         title: recipe?.title,
         servings: recipe?.servings,
-        ingredients: recipe?.ingredients,
       },
       { emitEvent: false }
     );
@@ -159,6 +164,24 @@ export class RecipeEditPage extends EditComponent<Recipe> {
       )
     );
     ev.detail.complete();
+  }
+
+  async setIngredientQuantity(ingredientQuantity: IngredientQuantity) {
+    const ingredientId = ingredientQuantity.id;
+
+    return firstValueFrom(
+      this.recipesService.setIngredientQuantity(
+        this.entity?.id as string,
+        ingredientId,
+        omit(ingredientQuantity, ['id'])
+      )
+    );
+  }
+
+  changeServings(increment: number) {
+    this.form?.patchValue({
+      servings: (this.form?.value?.servings || 0) + increment,
+    });
   }
 
   ionViewWillLeave() {

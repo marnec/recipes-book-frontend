@@ -18,7 +18,14 @@
       type="number"
       placeholder="#"
       formControlName="servings"
+      [readonly]="true"
     ></ion-input>
+    <ion-button (click)="changeServings(1)">
+      <ion-icon slot="icon-only" name="caret-up-circle-outline"></ion-icon>
+    </ion-button>
+    <ion-button (click)="changeServings(-1)">
+      <ion-icon slot="icon-only" name="caret-down-circle-outline"></ion-icon>
+    </ion-button>
   </ion-item>
   <ion-item lines="full">
     <ion-label>
@@ -36,9 +43,10 @@
     >
       <app-recipe-ingredient-item
         *ngFor="let recipeIngredient of entity?.ingredients"
-        [ingredient]="recipeIngredient.ingredient"
+        [ingredient]="recipeIngredient"
         (ingredientRemove)="removeIngredient($event)"
         (ingredientConnect)="findIngredient($event)"
+        (quantityChange)="setIngredientQuantity($event)"
       >
       </app-recipe-ingredient-item>
     </ion-reorder-group>

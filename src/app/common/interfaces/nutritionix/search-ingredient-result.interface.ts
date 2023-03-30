@@ -1,3 +1,8 @@
+export interface IngredientFullNutrient {
+  value: number;
+  attrId: number;
+}
+
 export interface IngredientSearchResult {
   foodName: string;
 
@@ -5,7 +10,7 @@ export interface IngredientSearchResult {
 
   tagName: string;
 
-  servingQty: 1;
+  servingQty: number;
 
   commonType: null;
 
@@ -15,4 +20,8 @@ export interface IngredientSearchResult {
     thumb: string;
   };
   locale: string;
+
+  fullNutrients: IngredientFullNutrient[]
+
+  servingWeightGrams: number;
 }

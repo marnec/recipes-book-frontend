@@ -4,7 +4,11 @@ export abstract class AsyncComponent {
 
     unsubscribe$!: Subject<null>;
 
-    ionViewWillEnter() {
+    instantiateUnsubscribe() {
         this.unsubscribe$ = new Subject<null>();
+    }
+
+    ionViewWillEnter() {
+        this.instantiateUnsubscribe();
     }
 }

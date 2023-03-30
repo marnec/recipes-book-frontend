@@ -1,14 +1,18 @@
 ion-input {
-    font-size: small;
+  font-size: small;
+}
+
+ion-label {
+  font-size: small !important;
 }
 
 ion-reorder {
-    margin-right: 10px;
-    margin-left: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 ion-item {
-    --padding-start: 4px;
-    --inner-padding-end: 4px;
-    --min-height: 24px;
+  --padding-start: 4px;
+  --inner-padding-end: 4px;
+  --min-height: 24px;
 }

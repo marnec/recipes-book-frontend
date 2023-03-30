@@ -1,24 +1,24 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { first, map, Observable, of, Subject, switchMap, tap } from 'rxjs';
+import { first, map, Observable, of, switchMap, tap } from 'rxjs';
 import { ID_PLACEHOLDER, URLPARAM_ID_KEY } from '../constants';
 import { CrudService } from '../crud.service';
-import { BaseI } from '../interfaces/base.interface';
 import { AsyncComponent } from './async.abstract.component';
 
 @Component({
   selector: '',
   template: '',
 })
-export abstract class EditComponent<E> extends AsyncComponent {
+export abstract class EditComponent<
+  E,
+  O extends string = 'id'
+> extends AsyncComponent {
   @Input() entity: E | undefined | null;
 
-  form:
-    | FormGroup<{
-        [K in keyof Omit<E, 'id'>]: FormControl<E[K] | undefined | null>;
-      }>
-    | undefined;
+  form!: FormGroup<{
+    [K in keyof Omit<E, O>]: FormControl<E[K] | null>;
+  }>;
 
   constructor(
     protected route: ActivatedRoute,

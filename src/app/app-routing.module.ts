@@ -13,7 +13,7 @@ const redirectLoggedInToItems = () => redirectLoggedInTo(['home']);
 const belongsToAccount = (next: any) =>
   hasCustomClaim(`account-${next.params.id}`);
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
@@ -35,10 +35,18 @@ const routes: Routes = [
   },
   {
     path: 'recipes',
-    loadChildren: () => import('./recipes/recipes.module').then((m) => m.RecipesPageModule),
+    loadChildren: () =>
+      import('./recipes/recipes.module').then((m) => m.RecipesPageModule),
     canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin }
-  }
+    data: { authGuardPipe: redirectUnauthorizedToLogin, showInSideMenu: true, sideMenuIcon: 'list' },
+  },
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./user/user.module').then((m) => m.UserPageModule),
+    canActivate: [AngularFireAuthGuard],
+    data: { authGuardPipe: redirectUnauthorizedToLogin, showInSideMenu: true, sideMenuIcon: 'user' },
+  },
 ];
 
 @NgModule({
