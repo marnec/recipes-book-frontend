@@ -6,6 +6,13 @@ export enum IngredientModalDismissRoles {
   select = 'select',
   create = 'create',
   cancel = 'backdrop',
-  link = 'link'
+  link = 'link',
 }
 
+export enum ActivityLevel {
+  sendentary = 1.2,
+  lightly = 1.375,
+  moderately = 1.55,
+  very = 1.725,
+  extremely = 1.9,
+}

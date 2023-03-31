@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, filter, first, switchMap, tap } from 'rxjs';
 import { EditComponent } from '../common/components/edit.abstract.component';
-import { DEFAULT_DEBOUNCE } from '../common/constants';
+import { ActivityLevel, DEFAULT_DEBOUNCE } from '../common/constants';
 import { User } from '../common/interfaces/user.interface';
 import { UserService } from './user.service';
 
@@ -17,6 +17,9 @@ export class UserPage extends EditComponent<
   User,
   'id' | 'uid' | 'created' | 'modified' | 'email'
 > {
+
+  activityLevels = Object.keys(ActivityLevel)
+
   constructor(
     private auth: AngularFireAuth,
     private userService: UserService,
@@ -42,7 +45,7 @@ export class UserPage extends EditComponent<
           this.form = new FormGroup({
             avatar: new FormControl(this.entity?.avatar),
             userName: new FormControl(this.entity?.userName),
-            activityLevel: new FormControl(this.entity?.activityLevel),
+            activityLevel: new FormControl(this.entity?.activityLevel || 0),
             age: new FormControl(this.entity?.age),
             gender: new FormControl(this.entity?.gender),
             height: new FormControl(this.entity?.height),

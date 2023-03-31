@@ -31,7 +31,7 @@ export interface User {
 
   age?: number;
 
-  activityLevel?: string;
+  activityLevel: number;
 
   created: Date;
 

@@ -49,7 +49,15 @@
       "age": "Age",
       "gender": { "lbl": "Gender", "M": "Male", "F": "Female" },
       "height": "Height",
-      "weight": "Weight"
+      "weight": "Weight",
+      "activityLevel": "Activity level"
     }
+  },
+  "activityLevel": {
+    "sendentary": "Sendentary: Little or No Exercise, Desk Job",
+    "lightly": "Lightly Active: Light exercise, Sports 1-3 days/week",
+    "moderately": "Moderately Active: Moderate exercise, Sports 3-5 days/week",
+    "very": "Very Active: Heavy Exercise, Sports 6-7 days/week",
+    "extremely": "Extremely Active: Exercise, Sports several times per day"
   }
 }

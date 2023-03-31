@@ -39,7 +39,7 @@ export class UserService extends CrudService<User> {
     if (!dto) {
       return this.http.post<User>(`${environment.api}/users/${id}`, {});
     }
-    return this.http.post<User>(`${environment.api}/users/${id}`, dto);
+    return this.http.put<User>(`${environment.api}/users/${id}`, dto);
   }
   delete(id: string): Observable<void> {
     throw new Error('Method not implemented.');

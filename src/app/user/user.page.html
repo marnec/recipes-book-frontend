@@ -53,17 +53,54 @@
     <ion-row>
       <ion-col size="6">
         <ion-item fill="outline">
-          <ion-label position="stacked">{{ 'profile.content.height' | translate}}</ion-label>
+          <ion-label position="stacked"
+            >{{ 'profile.content.height' | translate}}</ion-label
+          >
           <ion-input formControlName="height" type="number"></ion-input>
           <div slot="end" class="text-small">cm</div>
         </ion-item>
       </ion-col>
       <ion-col size="6">
         <ion-item fill="outline">
-          <ion-label position="stacked">{{ 'profile.content.weight' | translate}}</ion-label>
+          <ion-label position="stacked"
+            >{{ 'profile.content.weight' | translate}}</ion-label
+          >
           <ion-input formControlName="weight" type="number"></ion-input>
           <div slot="end" class="text-small">kg</div>
         </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <div class="flex flex-column ion-justify-content-center m-1">
+          <ion-text class="ion-text-center"
+            >{{ 'profile.content.activityLevel' | translate }}</ion-text
+          >
+          <ion-range
+            [min]="0"
+            [max]="4"
+            [dualKnobs]="false"
+            [pin]="true"
+            [snaps]="true"
+            [step]="1"
+            [ticks]="true"
+            color="primary"
+            formControlName="activityLevel"
+          >
+            <ion-label slot="start">0</ion-label>
+            <ion-label slot="end">4</ion-label>
+          </ion-range>
+          <ion-item lines="none">
+            <ion-icon slot="end" name="information-circle-outline"></ion-icon>
+            <ion-text
+              *ngIf="form.controls.activityLevel.value !== undefined && form.controls.activityLevel.value !== null"
+            >
+              {{ 'activityLevel.' +
+              activityLevels[form.controls.activityLevel.value * 2] |
+              translate}}
+            </ion-text>
+          </ion-item>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
