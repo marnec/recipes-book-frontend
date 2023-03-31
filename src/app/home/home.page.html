@@ -26,7 +26,7 @@
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title> {{ 'home.toolbar.title' | translate }} </ion-title>
-        <ion-avatar class="p-1">
+        <ion-avatar class="p-1" routerLink="/profile">
           <img
             alt="Silhouette of a person's head"
             [src]="(user$ | async)?.photoURL"

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { filter, first, switchMap, tap } from 'rxjs';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { debounceTime, filter, first, switchMap, tap } from 'rxjs';
+import { EditComponent } from '../common/components/edit.abstract.component';
+import { DEFAULT_DEBOUNCE } from '../common/constants';
+import { User } from '../common/interfaces/user.interface';
 import { UserService } from './user.service';
 
 @Component({
@@ -8,17 +13,47 @@ import { UserService } from './user.service';
   templateUrl: './user.page.html',
   styleUrls: ['./user.page.scss'],
 })
-export class UserPage {
+export class UserPage extends EditComponent<
+  User,
+  'id' | 'uid' | 'created' | 'modified' | 'email'
+> {
   constructor(
     private auth: AngularFireAuth,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    protected override route: ActivatedRoute
+  ) {
+    super(route, userService);
+  }
 
-  ionViewWillEnter() {
-    this.auth.user.pipe(
-      filter(Boolean),
-      first(),
-      switchMap(({ uid }) => this.userService.getSelf(uid))
-    );
+  override ionViewWillEnter() {
+    let userUid: string;
+
+    this.auth.user
+      .pipe(
+        filter(Boolean),
+        first(),
+        switchMap(({ uid }) => {
+          userUid = uid;
+          return this.userService.get(uid);
+        }),
+        switchMap((user) => {
+          this.entity = user;
+
+          this.form = new FormGroup({
+            avatar: new FormControl(this.entity?.avatar),
+            userName: new FormControl(this.entity?.userName),
+            activityLevel: new FormControl(this.entity?.activityLevel),
+            age: new FormControl(this.entity?.age),
+            gender: new FormControl(this.entity?.gender),
+            height: new FormControl(this.entity?.height),
+            weight: new FormControl(this.entity?.weight),
+          });
+
+          return this.form.valueChanges;
+        }),
+        debounceTime(DEFAULT_DEBOUNCE),
+        switchMap((value) => this.userService.save(userUid, value))
+      )
+      .subscribe();
   }
 }

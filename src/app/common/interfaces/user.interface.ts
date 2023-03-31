@@ -21,7 +21,7 @@ export interface User {
 
   userName?: string;
 
-  avatar: string;
+  avatar?: string;
 
   gender?: string;
 

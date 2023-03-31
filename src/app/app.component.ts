@@ -23,7 +23,7 @@ export class AppComponent {
     this.user$
       .pipe(
         filter(Boolean),
-        switchMap((user) => this.userService.upsertUser(user.uid))
+        switchMap((user) => this.userService.save(user.uid, null))
       )
       .subscribe();
   }

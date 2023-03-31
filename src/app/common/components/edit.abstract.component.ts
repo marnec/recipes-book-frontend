@@ -17,7 +17,7 @@ export abstract class EditComponent<
   @Input() entity: E | undefined | null;
 
   form!: FormGroup<{
-    [K in keyof Omit<E, O>]: FormControl<E[K] | null>;
+    [K in keyof Required<Omit<E, O>>]: FormControl<E[K] | null>;
   }>;
 
   constructor(

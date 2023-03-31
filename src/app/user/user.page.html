@@ -1,11 +1,70 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>user</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ 'profile.toolbar.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-<ion-avatar>
-  <!-- <img [src]="image" /> -->
-</ion-avatar>
+<ion-content *ngIf="entity" [formGroup]="form">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="auto">
+        <ion-avatar id="avatar">
+          <img [src]="'data:image/png;base64,' + entity.avatar" />
+        </ion-avatar>
+      </ion-col>
+      <ion-col>
+        <ion-item fill="outline">
+          <ion-icon slot="end" name="pencil" size="small"></ion-icon>
+          <ion-label position="stacked">
+            {{ 'profile.content.username' | translate}}
+          </ion-label>
+          <ion-input formControlName="userName" type="text"> </ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item fill="outline">
+          <ion-label position="stacked"
+            >{{ 'profile.content.age' | translate }}</ion-label
+          >
+          <ion-input formControlName="age" type="number"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item fill="outline">
+          <ion-label position="stacked"
+            >{{ 'profile.content.gender.lbl' | translate }}
+          </ion-label>
+          <ion-select [multiple]="false" formControlName="gender">
+            <ion-select-option value="M"
+              >{{ 'profile.content.gender.M' | translate }}</ion-select-option
+            >
+            <ion-select-option value="F"
+              >{{ 'profile.content.gender.F' | translate }}</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-item fill="outline">
+          <ion-label position="stacked">{{ 'profile.content.height' | translate}}</ion-label>
+          <ion-input formControlName="height" type="number"></ion-input>
+          <div slot="end" class="text-small">cm</div>
+        </ion-item>
+      </ion-col>
+      <ion-col size="6">
+        <ion-item fill="outline">
+          <ion-label position="stacked">{{ 'profile.content.weight' | translate}}</ion-label>
+          <ion-input formControlName="weight" type="number"></ion-input>
+          <div slot="end" class="text-small">kg</div>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

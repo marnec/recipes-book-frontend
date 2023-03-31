@@ -41,5 +41,15 @@
         "new": "add ingredient: {{label}}"
       }
     }
+  },
+  "profile": {
+    "toolbar": { "title": "Profile" },
+    "content": {
+      "username": "Username",
+      "age": "Age",
+      "gender": { "lbl": "Gender", "M": "Male", "F": "Female" },
+      "height": "Height",
+      "weight": "Weight"
+    }
   }
 }

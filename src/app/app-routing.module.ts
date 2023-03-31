@@ -38,14 +38,22 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./recipes/recipes.module').then((m) => m.RecipesPageModule),
     canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin, showInSideMenu: true, sideMenuIcon: 'list' },
+    data: {
+      authGuardPipe: redirectUnauthorizedToLogin,
+      showInSideMenu: true,
+      sideMenuIcon: 'list',
+    },
   },
   {
-    path: 'user',
+    path: 'profile',
     loadChildren: () =>
       import('./user/user.module').then((m) => m.UserPageModule),
     canActivate: [AngularFireAuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin, showInSideMenu: true, sideMenuIcon: 'user' },
+    data: {
+      authGuardPipe: redirectUnauthorizedToLogin,
+      showInSideMenu: true,
+      sideMenuIcon: 'person-circle-outline',
+    },
   },
 ];
 
