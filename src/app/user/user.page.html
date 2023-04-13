@@ -96,11 +96,18 @@
               *ngIf="form.controls.activityLevel.value !== undefined && form.controls.activityLevel.value !== null"
             >
               {{ 'activityLevel.' +
-              activityLevels[form.controls.activityLevel.value * 2] |
-              translate}}
+              activityLevels[form.controls.activityLevel.value] | translate}}
             </ion-text>
           </ion-item>
         </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item>
+          <ion-label>TDEE: </ion-label>
+          <ion-text color="primary"> {{ tdee | number : '1.2-2' }} kcal </ion-text>
+        </ion-item>
       </ion-col>
     </ion-row>
   </ion-grid>

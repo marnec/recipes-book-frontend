@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { debounceTime, filter, first, switchMap, tap } from 'rxjs';
 import { EditComponent } from '../common/components/edit.abstract.component';
-import { ActivityLevel, DEFAULT_DEBOUNCE } from '../common/constants';
+import { activityLevels, DEFAULT_DEBOUNCE } from '../common/constants';
 import { User } from '../common/interfaces/user.interface';
 import { UserService } from './user.service';
+
+import { Fitness, Gender, ReeVersion } from '../common/fitness.service';
 
 @Component({
   selector: 'app-user',
@@ -17,8 +19,8 @@ export class UserPage extends EditComponent<
   User,
   'id' | 'uid' | 'created' | 'modified' | 'email'
 > {
-
-  activityLevels = Object.keys(ActivityLevel)
+  activityLevels = activityLevels;
+  tdee: number | undefined;
 
   constructor(
     private auth: AngularFireAuth,
@@ -52,11 +54,30 @@ export class UserPage extends EditComponent<
             weight: new FormControl(this.entity?.weight),
           });
 
+          this.setTdee(user);
+
           return this.form.valueChanges;
         }),
         debounceTime(DEFAULT_DEBOUNCE),
+        tap((value) => {
+          this.setTdee(value as User);
+        }),
         switchMap((value) => this.userService.save(userUid, value))
       )
       .subscribe();
+  }
+
+  setTdee(user: User) {
+    const { gender, activityLevel, weight, height, age } = user;
+    if (!!gender && !!weight && !!height && !!age) {
+      this.tdee = Fitness.tdee(
+        gender.toLowerCase() as Gender,
+        ReeVersion.mifflinStJeor,
+        Fitness.activityLevel(activityLevel),
+        weight,
+        height,
+        age
+      );
+    }
   }
 }

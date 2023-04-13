@@ -9,10 +9,14 @@ export enum IngredientModalDismissRoles {
   link = 'link',
 }
 
-export enum ActivityLevel {
-  sendentary = 1.2,
-  lightly = 1.375,
-  moderately = 1.55,
-  very = 1.725,
-  extremely = 1.9,
-}
+export const activityLevels = [
+  'sendentary',
+  'lightly',
+  'moderately',
+  'very',
+  'extremely',
+];
+
+
+export const activityLevelBase = 1.2
+export const activityLevelStep = 0.175
