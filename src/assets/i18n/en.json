@@ -8,6 +8,11 @@
         "title": "Recipes",
         "subtitle": "Go to recipes list",
         "description": "A list of personal recipes"
+      },
+      "mealplans": {
+        "title": "Meal plans",
+        "subtitle": "Go to meal plans page",
+        "description": "Meal plans customization page"
       }
     }
   },

@@ -4,6 +4,7 @@
       <ion-back-button defaultHref="recipes"></ion-back-button>
     </ion-buttons>
     <ion-input
+      [label]="null"
       type="text"
       [placeholder]="'recipe.toolbar.titlePlaceholder' | translate"
       formControlName="title"
@@ -12,9 +13,9 @@
 </ion-header>
 
 <ion-content *ngIf="form" [formGroup]="form">
-  <ion-item>
-    <ion-label>{{ 'recipe.content.servings' | translate}}</ion-label>
+  <ion-item >
     <ion-input
+      [label]="'recipe.content.servings' | translate"
       type="number"
       placeholder="#"
       formControlName="servings"
@@ -27,7 +28,7 @@
       <ion-icon slot="icon-only" name="caret-down-circle-outline"></ion-icon>
     </ion-button>
   </ion-item>
-  <ion-item lines="full">
+  <ion-item >
     <ion-label>
       <h2>{{ 'recipe.content.ingredients.title' | translate }}</h2>
     </ion-label>
@@ -52,9 +53,11 @@
     </ion-reorder-group>
   </ion-list>
   <ion-item>
-    <ion-label>
-      <h2>{{ 'recipe.content.steps.title' | translate }}</h2>
-    </ion-label>
-    <ion-textarea [autoGrow]="true" formControlName="body"></ion-textarea>
+    <ion-textarea
+      labelPlacement="stacked"
+      [label]="'recipe.content.steps.title' | translate"
+      [autoGrow]="true"
+      formControlName="body"
+    ></ion-textarea>
   </ion-item>
 </ion-content>

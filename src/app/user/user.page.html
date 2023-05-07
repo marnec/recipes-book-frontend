@@ -16,30 +16,35 @@
         </ion-avatar>
       </ion-col>
       <ion-col>
-        <ion-item fill="outline">
           <ion-icon slot="end" name="pencil" size="small"></ion-icon>
-          <ion-label position="stacked">
-            {{ 'profile.content.username' | translate}}
-          </ion-label>
-          <ion-input formControlName="userName" type="text"> </ion-input>
-        </ion-item>
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.username' | translate"
+            formControlName="userName"
+            type="text"
+          >
+          </ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size="6">
-        <ion-item fill="outline">
-          <ion-label position="stacked"
-            >{{ 'profile.content.age' | translate }}</ion-label
-          >
-          <ion-input formControlName="age" type="number"></ion-input>
-        </ion-item>
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.age' | translate"
+            formControlName="age"
+            type="number"
+          ></ion-input>
       </ion-col>
       <ion-col size="6">
-        <ion-item fill="outline">
-          <ion-label position="stacked"
-            >{{ 'profile.content.gender.lbl' | translate }}
-          </ion-label>
-          <ion-select [multiple]="false" formControlName="gender">
+          <ion-select
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.gender.lbl' | translate"
+            [multiple]="false"
+            formControlName="gender"
+          >
             <ion-select-option value="M"
               >{{ 'profile.content.gender.M' | translate }}</ion-select-option
             >
@@ -47,27 +52,29 @@
               >{{ 'profile.content.gender.F' | translate }}</ion-select-option
             >
           </ion-select>
-        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size="6">
-        <ion-item fill="outline">
-          <ion-label position="stacked"
-            >{{ 'profile.content.height' | translate}}</ion-label
-          >
-          <ion-input formControlName="height" type="number"></ion-input>
+          <ion-input
+            fill="outline"
+            labelPlacement="stacked"
+            [label]="'profile.content.height' | translate"
+            formControlName="height"
+            type="number"
+          ></ion-input>
           <div slot="end" class="text-small">cm</div>
-        </ion-item>
       </ion-col>
       <ion-col size="6">
-        <ion-item fill="outline">
-          <ion-label position="stacked"
-            >{{ 'profile.content.weight' | translate}}</ion-label
-          >
-          <ion-input formControlName="weight" type="number"></ion-input>
+          <ion-input
+            fill="outline"
+            [label]="'profile.content.weight' | translate"
+            labelPlacement="stacked"
+            formControlName="weight"
+            type="number"
+          ></ion-input>
           <div slot="end" class="text-small">kg</div>
-        </ion-item>
+        
       </ion-col>
     </ion-row>
     <ion-row>
@@ -106,7 +113,9 @@
       <ion-col size="12">
         <ion-item>
           <ion-label>TDEE: </ion-label>
-          <ion-text color="primary"> {{ tdee | number : '1.2-2' }} kcal </ion-text>
+          <ion-text color="primary">
+            {{ tdee | number : '1.2-2' }} kcal
+          </ion-text>
         </ion-item>
       </ion-col>
     </ion-row>

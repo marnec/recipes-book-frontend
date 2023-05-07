@@ -55,6 +55,10 @@ export const routes: Routes = [
       sideMenuIcon: 'person-circle-outline',
     },
   },
+  {
+    path: 'mealplans',
+    loadChildren: () => import('./plans/plans.module').then( m => m.PlansPageModule)
+  },
 ];
 
 @NgModule({
